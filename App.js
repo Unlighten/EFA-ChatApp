@@ -1,14 +1,14 @@
 import React from 'react'
 import { StackNavigator } from "react-navigation"
 
-import Navigation from './src/navigation/navigation'
+import Home from './src/screens/navigation/index'
 import Landing from './src/screens/landing/index'
 
 
 const App = StackNavigator(
   {
     Landing: { screen: Landing },
-    Navigation: { screen: Navigation }
+    Home: { screen: Home }
   },
   {
     index: 0,

@@ -1,10 +1,10 @@
 import React from "react";
 import { TabNavigator, TabBarBottom } from "react-navigation";
 
-import Channels from '../screens/channels/index'
-import Inbox from '../screens/inbox/index'
+import Channels from '../channels/index'
+import Inbox from '../inbox/index'
 
-const Navigation = TabNavigator(
+const Home = TabNavigator(
   
   {
     Channels: { screen: Channels },
@@ -20,4 +20,4 @@ const Navigation = TabNavigator(
   }
 );
 
-export default Navigation;
+export default Home;
