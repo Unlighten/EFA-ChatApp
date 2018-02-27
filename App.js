@@ -4,6 +4,10 @@ import { StackNavigator } from "react-navigation"
 import Home from './src/screens/navigation/index'
 import Landing from './src/screens/landing/index'
 
+import * as firebase from 'firebase';
+import firebaseConfig from './firebaseConfig';
+
+firebase.initializeApp(firebaseConfig)
 
 const App = StackNavigator(
   {

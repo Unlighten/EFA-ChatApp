@@ -1,9 +1,14 @@
 import color from "color";
 
-import { Platform, Dimensions, PixelRatio } from "react-native";
-
 export default {
   
   //Text Color
-  brandColor: 'darkred'
+  brandColor: 'darkred',
+  textColor: 'black',
+
+  //Button Color
+  buttonColor: 'lightgrey',
+
+  //Touchable Highlight Underlay
+  underlay: 'grey',
 };
