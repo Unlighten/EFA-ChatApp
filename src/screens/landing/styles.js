@@ -6,7 +6,7 @@ export default {
 
     view: {
         marginHorizontal: metrics.DEVICE_WIDTH * 0.05,
-        marginVertical: metrics.DEVICE_HEIGHT * 0.05,
+        marginVertical: 5,
     },
 
     textInput: {
@@ -24,6 +24,7 @@ export default {
         fontSize: 20,
         color: commonColor.brandColor,
         textAlign: 'center',
-    }
+    },
+
 
 }

@@ -5,7 +5,7 @@ import styles from './styles'
 class Title extends React.Component {
     render() {
         return (
-            <View style={{paddingTop: Expo.Constants.statusBarHeight}}>
+            <View style={styles.container}>
                 <Text style={styles.title}>ChitChat</Text>
             </View>
         )

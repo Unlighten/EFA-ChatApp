@@ -1,8 +1,9 @@
 import React from 'react'
 import { StackNavigator } from "react-navigation"
 
-import Home from './src/screens/navigation/index'
-import Landing from './src/screens/landing/index'
+import Home from './src/screens/home'
+import Landing from './src/screens/landing'
+import Title from './src/components/title'
 
 import * as firebase from 'firebase';
 import firebaseConfig from './firebaseConfig';
@@ -15,7 +16,11 @@ const App = StackNavigator(
     Home: { screen: Home }
   },
   {
-    index: 0,
+  navigationOptions: {
+     header: <Title />
+    }
+  },
+  {
     initialRouteName: 'Landing',
     headerMode: "none"
   }
@@ -24,7 +29,7 @@ const App = StackNavigator(
 export default class Main extends React.Component {
   render() {
     return (
-        <App />
+          <App />
     );
   }
 }
