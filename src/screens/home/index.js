@@ -8,7 +8,7 @@ const Home = TabNavigator(
   
   {
     Channels: { screen: Channels },
-    Inbox: { screen: Inbox }
+    Inbox: { screen: Inbox },
   },
   {
     tabBarPosition: "bottom",
