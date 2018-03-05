@@ -44,13 +44,13 @@ export default class FinishProfile extends React.Component {
         return (
             <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
                     <TouchableHighlight 
-                        style = {{backgroundColor: 'blue', flex: 1, padding: 15, margin: 10 }}
+                        style = {styles.takePhotoBtn}
                         onPress = {() => this.takePhoto()}>
                         <Text style = {{textAlign: 'center'}}>Take Photo</Text>
                     </TouchableHighlight>
 
                     <TouchableHighlight 
-                        style = {{backgroundColor: 'red', flex: 1, padding: 15, margin: 10 }}
+                        style = {styles.pickPhotoBtn}
                         onPress = {() => this.pickPhoto()}>
                         <Text style = {{textAlign: 'center'}}>Upload Photo</Text>
                     </TouchableHighlight>
