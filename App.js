@@ -1,21 +1,35 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { StackNavigator } from "react-navigation"
 
-export default class App extends React.Component {
+import Home from './src/screens/home'
+import Landing from './src/screens/landing'
+import Title from './src/components/title'
+
+import * as firebase from 'firebase';
+import firebaseConfig from './firebaseConfig';
+
+firebase.initializeApp(firebaseConfig)
+
+const App = StackNavigator(
+  {
+    Landing: { screen: Landing },
+    Home: { screen: Home }
+  },
+  {
+  navigationOptions: {
+     header: <Title />
+    }
+  },
+  {
+    initialRouteName: 'Landing',
+    headerMode: "none"
+  }
+);
+
+export default class Main extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Welcome to the chat app</Text>
-      </View>
+          <App />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
