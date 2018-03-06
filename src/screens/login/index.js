@@ -38,7 +38,7 @@ export default class Landing extends React.Component {
                 let userInfo = {
                     username: this.state.signupUsername
                 }
-                firebase.database().ref('userInformation/').child(uid).set(userInfo)
+                firebase.database().ref('userInformation').child(uid).set(userInfo)
                 this.props.navigation.navigate('FinishProfile', { uid })
             })
             .catch(res => {

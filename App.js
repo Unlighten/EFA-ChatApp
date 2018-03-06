@@ -2,9 +2,10 @@ import React from 'react'
 import { StackNavigator } from "react-navigation"
 
 import Home from './src/screens/home'
-import Landing from './src/screens/landing'
+import Login from './src/screens/login'
 import Title from './src/components/title'
 import FinishProfile from './src/screens/finishProfile'
+import LoadingScreen from './src/screens/loadingScreen'
 
 import * as firebase from 'firebase';
 import firebaseConfig from './firebaseConfig';
@@ -13,9 +14,10 @@ firebase.initializeApp(firebaseConfig)
 
 const App = StackNavigator(
   {
-    Landing: { screen: Landing },
+    LoadingScreen: { screen: LoadingScreen },
+    Login: { screen: Login },
     Home: { screen: Home },
-    FinishProfile: { screen: FinishProfile }
+    FinishProfile: { screen: FinishProfile },
   },
   {
   navigationOptions: {
@@ -23,7 +25,7 @@ const App = StackNavigator(
     }
   },
   {
-    initialRouteName: 'Landing',
+    initialRouteName: 'LoadingScreen',
     headerMode: "none"
   }
 );

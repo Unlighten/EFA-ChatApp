@@ -41,7 +41,7 @@ export default class FinishProfile extends React.Component {
 
     uploadButtonPressed = async () => {
         let uploadResponse, uploadResult;
-
+        let uid = this.uid
         try {
     
             uploadResponse = await this.uploadPhoto(this.state.image);
@@ -49,6 +49,9 @@ export default class FinishProfile extends React.Component {
             let imageUrl = JSON.stringify(uploadResult.location)
             imageUrl = imageUrl.replace(/"/g, '')
             firebase.database().ref('userInformation').child(this.uid).child('profImage').set(imageUrl)
+            .then(() => {
+                this.props.navigation.navigate('Home', { uid })
+            })
             
         } catch (e) {
           console.log({ uploadResponse });
