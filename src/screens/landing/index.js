@@ -19,17 +19,18 @@ export default class Landing extends React.Component {
         }
     }
 
-    signin() {
+    signin = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.signinEmail, this.state.signinPassword)
         .then(res => {
-            this.props.navigation.navigate('FinishProfile')
+            let uid = res.uid
+            this.props.navigation.navigate('FinishProfile', { uid })
         })
         .catch(res => {
         console.log('error ', res.code)
         })
     }
 
-    signup() {
+    signup = () => {
         if (this.state.signupPassword == this.state.signupConfirmPassword) {
             firebase.auth().createUserWithEmailAndPassword(this.state.signupEmail, this.state.signupPassword)
             .then(res => {
@@ -38,7 +39,7 @@ export default class Landing extends React.Component {
                     username: this.state.signupUsername
                 }
                 firebase.database().ref('userInformation/').child(uid).set(userInfo)
-                this.props.navigation.navigate('FinishProfile')
+                this.props.navigation.navigate('FinishProfile', { uid })
             })
             .catch(res => {
                 console.log('error ', res)

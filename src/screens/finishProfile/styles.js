@@ -4,18 +4,22 @@ import commonColor from "../../../theme/commonColor";
 
 export default {
 
+    button: {
+        flex: 1, 
+        padding: 15, 
+        margin: 10
+    },
+    buttons: {
+        justifyContent: 'space-around', 
+        flexDirection: 'row'
+    },
+    deletePhotoBtn: {
+        backgroundColor: 'red'
+    },
     takePhotoBtn: {
-        backgroundColor: commonColor.buttonColor, 
-        flex: 1, 
-        padding: 15, 
-        margin: 10
+        backgroundColor: commonColor.brandColor
     },
-
-    uploadPhotoBtn: {
-        backgroundColor: commonColor.brandColor, 
-        flex: 1, 
-        padding: 15, 
-        margin: 10
+    pickPhotoBtn: {
+        backgroundColor: commonColor.buttonColor
     },
-
 }
