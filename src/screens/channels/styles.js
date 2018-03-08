@@ -12,7 +12,7 @@ export default {
     innerContainer: {
         flex: 3, 
         flexDirection: 'column', 
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     touchable: {
         flex: 1

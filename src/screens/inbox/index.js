@@ -13,7 +13,7 @@ export default class Inbox extends React.Component {
   };
 
 runFunction = () => {
-    console.log('sup brev')
+    console.log('sup brev', this.props.navigation.state.params.uid)
 }  
 
   render(){
