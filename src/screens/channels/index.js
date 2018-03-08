@@ -14,18 +14,23 @@ export default class Channels extends React.Component {
             loading: true
         }
 
-        uid = this.props.navigation.state.params.uid
+        this.userObj = this.props.navigation.state.params.userObj
     }
 
     componentDidMount = async () => {
-        const res = await firebase.database().ref("channels").once("value");
-        const arrayObjects = Object.values(res.val());
-        const channelsArray = arrayObjects.map((item) => (item));
-        this.setState({channelsArray, loading: false})
+        await firebase.database().ref("channels").once("value")
+        .then(res => {
+            const channelsArray = Object.entries(res.val()).map(([key, val]) => {
+                val.name = key
+                return val
+            })
+          this.setState({channelsArray, loading: false})
+        })
     }
 
     renderChannels = () => { 
         let { channelsArray, loading } = this.state
+        let userObj = this.userObj
         if (loading) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -42,7 +47,7 @@ export default class Channels extends React.Component {
               <TouchableOpacity
                 key={index}
                 style={styles.touchable}
-                onPress={() => this.props.navigation.navigate('Channel', { uid })}
+                onPress={() => this.props.navigation.navigate('Channel', { userObj, channel })}
               >
                 <View style={styles.row} backgroundColor={channel.style.backgroundColor}>
                   <View style={styles.avatar} backgroundColor={channel.style.avatarText}/>
