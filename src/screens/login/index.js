@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TextInput, TouchableHighlight, KeyboardAvoidingView  } from 'react-native'
+import { Text, View, TextInput, TouchableHighlight  } from 'react-native'
 import styles from './styles'
 import commonColor from '../../../theme/commonColor';
 
