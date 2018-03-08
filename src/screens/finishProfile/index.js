@@ -13,6 +13,7 @@ export default class FinishProfile extends React.Component {
 
         }
         this.uid = this.props.navigation.state.params.uid
+        this.username = this.props.navigation.state.params.username
       }
 
     componentWillMount = () => {
@@ -50,7 +51,13 @@ export default class FinishProfile extends React.Component {
             imageUrl = imageUrl.replace(/"/g, '')
             firebase.database().ref('userInformation').child(this.uid).child('profImage').set(imageUrl)
             .then(() => {
-                this.props.navigation.navigate('Home', { uid })
+                userObj = {
+                    uid: uid,
+                    username: this.username,
+                    profImage: imageUrl
+                }
+                this.props.navigation.navigate('Channels', { userObj })
+                //must update home as well
             })
             
         } catch (e) {
@@ -91,6 +98,9 @@ export default class FinishProfile extends React.Component {
 
         return (
             <View> 
+                <TouchableHighlight onPress={() => firebase.auth().signOut()}>
+                    <Text>Logout</Text>
+                </TouchableHighlight>
             {image   ?  
                 <View style={styles.buttons}>
                     <TouchableHighlight 

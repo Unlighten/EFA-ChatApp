@@ -6,17 +6,24 @@ import commonColor from '../../../theme/commonColor';
 export default class LoadingScreen extends Component {
 
     componentDidMount = async () => {
-        console.log('test')
         await firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 let uid = user.uid
-                firebase.database().ref('userInformation').child(uid).child('profImage').once('value')
-                .then(res => {
-                    console.log('res', res.val())
-                    if (res) {
-                        this.props.navigation.navigate('Home', { uid })
+                firebase.database().ref('userInformation').child(uid).once('value')
+                .then((res) => {
+                    let data = res.val()
+                    let username = data.username
+                    let profImage = data.profImage
+                    if (data.profImage == undefined) {
+                        this.props.navigation.navigate('FinishProfile', { uid, username })
+                        //must update finsh profile also
                     } else {
-                        this.props.navigation.navigate('FinishProfile', { uid })                        
+                        let userObj = {
+                            uid: uid,
+                            username: username,
+                            profImage: profImage
+                        }
+                        this.props.navigation.navigate('Home', { userObj })
                     }
                 })
             } else {
