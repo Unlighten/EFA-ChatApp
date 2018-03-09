@@ -6,7 +6,7 @@ import firebase from 'firebase'
 import Channel from '../channel'
 
 export default class Channels extends React.Component {
-
+    
     constructor(props){
         super(props)
         this.state = {
@@ -67,5 +67,6 @@ export default class Channels extends React.Component {
                     {this.renderChannels()}
                 </View>
         )
+        
     }
 }

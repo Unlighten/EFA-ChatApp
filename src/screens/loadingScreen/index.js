@@ -5,7 +5,7 @@ import commonColor from '../../../theme/commonColor';
 
 export default class LoadingScreen extends Component {
 
-    componentWillMount = async () => {
+    componentDidMount = async () => {
         await firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 let uid = user.uid
