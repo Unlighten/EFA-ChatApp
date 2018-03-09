@@ -14,7 +14,7 @@ export default class Channels extends React.Component {
             loading: true
         }
 
-        this.userObj = this.props.navigation.state.params.userObj
+        this.userInfo = this.props.navigation.state.params.userInfo
     }
 
     componentDidMount = async () => {
@@ -30,7 +30,7 @@ export default class Channels extends React.Component {
 
     renderChannels = () => { 
         let { channelsArray, loading } = this.state
-        let userObj = this.userObj
+        let userInfo = this.userInfo
         if (loading) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -47,7 +47,7 @@ export default class Channels extends React.Component {
               <TouchableOpacity
                 key={index}
                 style={styles.touchable}
-                onPress={() => this.props.navigation.navigate('Channel', { userObj, channel })}
+                onPress={() => this.props.navigation.navigate('Channel', { userInfo, channel })}
               >
                 <View style={styles.row} backgroundColor={channel.style.backgroundColor}>
                   <View style={styles.avatar} backgroundColor={channel.style.avatarText}/>

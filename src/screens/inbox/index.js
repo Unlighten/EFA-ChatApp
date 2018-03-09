@@ -10,10 +10,12 @@ export default class Inbox extends React.Component {
     this.state = {
       inbox: []
     }
+
+    this.userInfo = this.props.navigation.state.params.userInfo
   };
 
 runFunction = () => {
-    console.log('sup brev', this.props.navigation.state.params.userObj)
+    console.log('sup brev', this.props.navigation.state.params.userInfo)
 }  
 
 logout = () => {

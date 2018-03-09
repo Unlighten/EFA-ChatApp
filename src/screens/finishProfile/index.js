@@ -51,12 +51,12 @@ export default class FinishProfile extends React.Component {
             imageUrl = imageUrl.replace(/"/g, '')
             firebase.database().ref('userInformation').child(this.uid).child('profImage').set(imageUrl)
             .then(() => {
-                userObj = {
+                userInfo = {
                     uid: uid,
                     username: this.username,
                     profImage: imageUrl
                 }
-                this.props.navigation.navigate('Channels', { userObj })
+                this.props.navigation.navigate('Home', { userInfo })
                 //must update home as well
             })
             

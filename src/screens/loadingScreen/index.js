@@ -18,12 +18,12 @@ export default class LoadingScreen extends Component {
                         this.props.navigation.navigate('FinishProfile', { uid, username })
                         //must update finsh profile also
                     } else {
-                        let userObj = {
+                        let userInfo = {
                             uid: uid,
                             username: username,
                             profImage: profImage
                         }
-                        this.props.navigation.navigate('Home', { userObj })
+                        this.props.navigation.navigate('Home', { userInfo })
                     }
                 })
             } else {
