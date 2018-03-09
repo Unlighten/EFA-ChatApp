@@ -21,7 +21,7 @@ export default class Channels extends React.Component {
         await firebase.database().ref("channels").once("value")
         .then(res => {
             const channelsArray = Object.entries(res.val()).map(([key, val]) => {
-                val.name = key
+                val.route = key
                 return val
             })
           this.setState({channelsArray, loading: false})

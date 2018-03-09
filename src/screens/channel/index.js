@@ -17,7 +17,7 @@ export default class Channel extends React.Component {
     }
 
     componentWillMount = async () => {
-        await firebase.database().ref('channelConversations').child(this.channel.name).child('messages')
+        await firebase.database().ref('channelConversations').child(this.channel.route).child('messages')
         console.log(this.userObj)
     }
 
@@ -28,7 +28,7 @@ export default class Channel extends React.Component {
             message: this.state.message,
             date: date
         }
-        firebase.database().ref('channelConversations').child(this.channel.name).child('messages').push(message)
+        firebase.database().ref('channelConversations').child(this.channel.route).child('messages').push(message)
     }
 
     render() {
@@ -39,7 +39,7 @@ export default class Channel extends React.Component {
                     placeholder = {'Message'}
                 />
                 <TouchableOpacity style={{height: 50, width: '100%', backgroundColor: 'pink'}} onPress={() => this.onSubmitMessage()}>
-                    <Text>Nathan's Button</Text>
+                    <Text>Submit</Text>
                 </TouchableOpacity>
             </View>
         )
