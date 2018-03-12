@@ -20,16 +20,18 @@ export default class Channel extends React.Component {
     componentDidMount = () => {
         firebase.database().ref('channelConversations').child(this.channel.route).child('messages').on('child_added', 
         (child) => {
+            // console.log('child', child9)
             let data = child.val()
             firebase.database().ref('userInformation').child(data.user).once('value')
             .then((res) => {
+                // console.log('res', res.val())
                 let userData = res.val()
                 data.profImage = userData.profImage
                 data.username = userData.username
                 // console.log()
             })
-            console.log(data)            
-            this.setState({messages: [...this.state.messages, data]})
+            // console.log(data)            
+            this.setState({messages: [...this.state.messages, data]}, () => {console.log('messages', this.state.messages)})
         })
     }
 
@@ -41,17 +43,21 @@ export default class Channel extends React.Component {
                 message: this.state.message,
                 date: date
             }
+            this.setState({message: ''})
             firebase.database().ref('channelConversations').child(this.channel.route).child('messages').push(message)
         }
     }
 
     renderItem({item}) {
-        console.log(item)
-        if (item.username && item.profImage) {
+        // console.log(item)
+        if (item.username && item.profImage !== undefined) {
             return (
             <View keyExtractor={item.user} style={styles.row}>
-                <Text style={styles.sender}>{item.username}</Text>
-                <Text style={styles.message}>{item.message}</Text>
+                <Image style={styles.avatar} source={{uri: item.profImage}} />
+                <View style={styles.rowText}>
+                    <Text style={styles.sender}>{item.username}</Text>
+                    <Text style={styles.message}>{item.message}</Text>
+                </View>
             </View>
             );
         }
@@ -63,9 +69,9 @@ export default class Channel extends React.Component {
             <View style={styles.container}>
                 <FlatList 
                  data={this.state.messages} 
+                 extraData={this.state}
                  renderItem={this.renderItem}
                  keyExtractor={(item, index) => index} 
-                 inverted
                 />
                 <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
                 <View style={styles.footer}>
@@ -76,6 +82,9 @@ export default class Channel extends React.Component {
                         underlineColorAndroid="transparent"
                         placeholder="Message..."
                     />
+                    <TouchableOpacity style={styles.submit} onPress={() => this.onSubmitMessage()}>
+                        <Text style={styles.submitText}>Submit</Text>
+                    </TouchableOpacity>
                 </View>
                 </KeyboardAvoidingView>
             </View>
