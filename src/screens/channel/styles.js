@@ -47,6 +47,14 @@ export default {
     },
     submitText: {
       alignSelf: 'center'
+    },
+    backBtn: {
+      backgroundColor: commonColor.brandColor,
+      padding: 3
+    },
+    backText: {
+      color: commonColor.inverseTextColor,
+      fontSize: 18,
+      fontWeight: '600',
     }
-
 }

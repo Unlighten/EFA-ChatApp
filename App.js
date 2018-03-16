@@ -7,6 +7,7 @@ import Title from './src/components/title'
 import FinishProfile from './src/screens/finishProfile'
 import LoadingScreen from './src/screens/loadingScreen'
 import Channel from './src/screens/channel'
+import Chat from './src/screens/chat'
 
 import * as firebase from 'firebase';
 import firebaseConfig from './firebaseConfig';
@@ -19,7 +20,8 @@ const App = StackNavigator(
     Login: { screen: Login },
     Home: { screen: Home },
     FinishProfile: { screen: FinishProfile },
-    Channel : { screen: Channel }
+    Channel: { screen: Channel },
+    Chat: { screen: Chat }
   },
   {
   navigationOptions: {

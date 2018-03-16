@@ -3,6 +3,7 @@ export default {
   //Text Color
   brandColor: 'darkred',
   textColor: 'black',
+  inverseTextColor: 'white',
 
   //Button Color
   buttonColor: 'lightgrey',

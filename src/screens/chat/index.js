@@ -1,53 +1,44 @@
 import React from 'react'
-import { View, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, FlatList } from 'react-native'
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput } from 'react-native'
 import styles from './styles'
 
 import firebase from 'firebase'
 
-export default class Channel extends React.Component {
+export default class Chat extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             message: '',
             messages: []
         }
 
+        this.otherUser = this.props.navigation.state.params.otherUser
         this.userInfo = this.props.navigation.state.params.userInfo
-        this.channel = this.props.navigation.state.params.channel
-    }
+    };
 
     componentDidMount = () => {
-        firebase.database().ref('channelConversations').child(this.channel.route).child('messages').on('child_added', 
+        firebase.database().ref('conversations').child(this.otherUser.conversationKey).child('messages').on('child_added', 
         (child) => {
-            let data = child.val()
-            firebase.database().ref('userInformation').child(data.user).once('value')
-            .then((res) => {
-                let userData = res.val()
-                data.profImage = userData.profImage
-                data.username = userData.username
-                data.key = child.key
-            })
-            let messages = this.state.messages
-            messages.push(data)
-            this.setState({messages})
+            console.log(child)
         })
     }
 
-    onSubmitMessage = () => {
+    submitMessage = () => {
         let date = Date.now()
         if (this.state.message.length) {
             let message = {
-                user: this.userInfo.uid,
-                message: this.state.message,
-                date: date
+                msg: this.state.message,
+                sender: this.userInfo.uid,
             }
             this.setState({message: ''})
-            firebase.database().ref('channelConversations').child(this.channel.route).child('messages').push(message)
+            firebase.database().ref('conversations').child(this.otherUser.conversationKey).child('messages').push(message)
+           
         }
     }
 
     renderItem({item}) {
+        console.log('whats', item)
         if (item.username && item.profImage !== undefined) {
             return (
             <View key={item.key} style={styles.row}>
@@ -61,10 +52,11 @@ export default class Channel extends React.Component {
         }
         return
     }
-
+    
     render() {
         return (
-            <View style={styles.container}>
+            <View>
+                <Text style={styles.username}>{this.otherUser.username}</Text>
                 <TouchableOpacity style={styles.backBtn} onPress={() => this.props.navigation.goBack()}>
                     <Text style={styles.backText}>Back</Text>
                 </TouchableOpacity>
@@ -74,20 +66,22 @@ export default class Channel extends React.Component {
                  renderItem={this.renderItem}
                  keyExtractor={(item) => item.key} 
                 />
-                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
-                <View style={styles.footer}>
+                <View style={styles.messageRow}>
                     <TextInput
                         value={this.state.message}
                         onChangeText={text => this.setState({message: text})}
                         style={styles.input}
                         underlineColorAndroid="transparent"
+                        placeholderTextColor="lightgrey"
                         placeholder="Message..."
                     />
-                    <TouchableOpacity style={styles.submit} onPress={() => this.onSubmitMessage()}>
+                    <TouchableOpacity style={styles.submit} onPress={() => this.submitMessage()}>
+                        <Text style={styles.submitText}>Submit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.submit} onPress={() => console.log('here', this.state.messages)}>
                         <Text style={styles.submitText}>Submit</Text>
                     </TouchableOpacity>
                 </View>
-                </KeyboardAvoidingView>
             </View>
         )
     }
