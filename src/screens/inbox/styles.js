@@ -12,7 +12,6 @@ export default {
     modalContainer: {
         flex: 1,
         flexDirection: 'column',
-        // justifyContent: 'space-around',
         marginTop: Expo.Constants.statusBarHeight
     },
     title: {

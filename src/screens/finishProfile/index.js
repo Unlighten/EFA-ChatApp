@@ -98,9 +98,6 @@ export default class FinishProfile extends React.Component {
 
         return (
             <View> 
-                <TouchableHighlight onPress={() => firebase.auth().signOut()}>
-                    <Text>Logout</Text>
-                </TouchableHighlight>
             {image   ?  
                 <View style={styles.buttons}>
                     <TouchableHighlight 

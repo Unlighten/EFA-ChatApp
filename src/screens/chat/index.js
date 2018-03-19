@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput, KeyboardAvoidingView } from 'react-native'
 import styles from './styles'
 
 import firebase from 'firebase'
@@ -20,7 +20,17 @@ export default class Chat extends React.Component {
     componentDidMount = () => {
         firebase.database().ref('conversations').child(this.otherUser.conversationKey).child('messages').on('child_added', 
         (child) => {
-            console.log(child)
+            let data = child.val()
+            firebase.database().ref('userInformation').child(data.sender).once('value')
+            .then((res) => {
+                let profData = res.val()
+                data.profImage = profData.profImage
+                data.username = profData.username
+                data.key = child.key
+            })
+            let messages = this.state.messages
+            messages.push(data)
+            this.setState({messages})
         })
     }
 
@@ -30,22 +40,21 @@ export default class Chat extends React.Component {
             let message = {
                 msg: this.state.message,
                 sender: this.userInfo.uid,
+                date: date
             }
             this.setState({message: ''})
             firebase.database().ref('conversations').child(this.otherUser.conversationKey).child('messages').push(message)
-           
         }
     }
 
     renderItem({item}) {
-        console.log('whats', item)
-        if (item.username && item.profImage !== undefined) {
+        if (item.username !== undefined) {
             return (
-            <View key={item.key} style={styles.row}>
-                <Image style={styles.avatar} source={{uri: item.profImage}} />
+            <View style={styles.row}>
+                <Image style={styles.avatar} source={{uri: item.profImage}} />            
                 <View style={styles.rowText}>
                     <Text style={styles.sender}>{item.username}</Text>
-                    <Text style={styles.message}>{item.message}</Text>
+                    <Text style={styles.message}>{item.msg}</Text>
                 </View>
             </View>
             );
@@ -55,7 +64,7 @@ export default class Chat extends React.Component {
     
     render() {
         return (
-            <View>
+            <View style={styles.container}>
                 <Text style={styles.username}>{this.otherUser.username}</Text>
                 <TouchableOpacity style={styles.backBtn} onPress={() => this.props.navigation.goBack()}>
                     <Text style={styles.backText}>Back</Text>
@@ -64,24 +73,26 @@ export default class Chat extends React.Component {
                  data={this.state.messages} 
                  extraData={this.state}
                  renderItem={this.renderItem}
-                 keyExtractor={(item) => item.key} 
+                 keyExtractor={(item, index) => index}
+                 ref={ref => this.flatList = ref}
+                 onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                 onLayout={() => this.flatList.scrollToEnd({animated: true})}
                 />
-                <View style={styles.messageRow}>
+                <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
+                <View style={styles.footer}>
                     <TextInput
                         value={this.state.message}
                         onChangeText={text => this.setState({message: text})}
                         style={styles.input}
                         underlineColorAndroid="transparent"
-                        placeholderTextColor="lightgrey"
                         placeholder="Message..."
+                        placeholderTextColor="lightgrey"
                     />
                     <TouchableOpacity style={styles.submit} onPress={() => this.submitMessage()}>
                         <Text style={styles.submitText}>Submit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.submit} onPress={() => console.log('here', this.state.messages)}>
-                        <Text style={styles.submitText}>Submit</Text>
-                    </TouchableOpacity>
                 </View>
+                </KeyboardAvoidingView>
             </View>
         )
     }

@@ -65,6 +65,9 @@ export default class Channels extends React.Component {
         return (
                 <View style={styles.container}>
                     {this.renderChannels()}
+                    <TouchableOpacity style={styles.logout} onPress={() => firebase.auth().signOut()}>
+                        <Text style={styles.logoutTxt}>Logout</Text>
+                    </TouchableOpacity>
                 </View>
         )
         

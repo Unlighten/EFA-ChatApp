@@ -34,5 +34,16 @@ export default {
         fontSize: 25,
         fontWeight: '700',
     },
+    logout: {
+        justifyContent: 'center',
+        backgroundColor: commonColor.brandColor,
+        padding: 5,     
+        marginHorizontal: metrics.DEVICE_WIDTH * 0.025,  
+        marginVertical: metrics.DEVICE_HEIGHT * 0.0075,                 
+    },
+    logoutTxt: {
+        textAlign: 'center',
+        color: commonColor.inverseTextColor
+    }
 
 }

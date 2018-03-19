@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, Modal, FlatList, ScrollView, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Image, Modal, ScrollView, TextInput } from "react-native";
 import styles from "./styles";
 import * as firebase from 'firebase'
 
@@ -12,8 +12,9 @@ export default class Inbox extends React.Component {
         super(props)
         this.state = {
             modalVisible: false,
-            users: [],
             inbox: [],
+            users: [],
+            filteredUsers: [],
             message: '',
     }
 
@@ -21,18 +22,19 @@ export default class Inbox extends React.Component {
     };
 
     componentDidMount = async () => {
-        let filteredUsers = []
         let inbox = []
         let uid = this.userInfo.uid
+        let filteredUsers = [uid]
 
-        await firebase.database().ref('userConversations').child(this.userInfo.uid).once('value')
-        .then((res) => {
-            const keys = Object.entries(res.val()).map(([key, val]) => {
-                return key
-                
-            })
-            for (let key of keys) {
-                firebase.database().ref('conversations').child(key).child('metadata').once('value')
+        this.refs.modal.show()
+        this.refs.modal.hide()
+
+        await firebase.database().ref('userConversations').child(this.userInfo.uid).on('child_added', 
+        (res) => {
+            if (res.val() == null) {
+                return   
+            } else {
+                firebase.database().ref('conversations').child(res.key).child('metadata').once('value')
                 .then((res) => {
                     let data = res.val()
                     let otherUser = {
@@ -48,8 +50,7 @@ export default class Inbox extends React.Component {
                         let profData = res.val()
                         otherUser.username = profData.username
                         otherUser.profImage = profData.profImage
-                        otherUser.conversationKey = key
-                        console.log(otherUser)
+                        otherUser.conversationKey = res.key
                         return otherUser
                     })
                     .then((otherUser) => {
@@ -57,21 +58,22 @@ export default class Inbox extends React.Component {
                         this.setState({inbox})
                     })
                 })
+                .then(() => {
+                    firebase.database().ref("userInformation").once("value")
+                    .then(res => {
+                        const users = Object.entries(res.val()).map(([key, val]) => {
+                                val.user = key
+                                return val
+                        }).reduce((finalUsers, current) => {
+                            if (!this.state.filteredUsers.includes(current.user)) {
+                                finalUsers.push(current)
+                            }
+                            return finalUsers
+                        }, [])
+                        this.setState({users})
+                    })
+                })
             }
-        })
-        await firebase.database().ref("userInformation").once("value")
-        .then(res => {
-            const users = Object.entries(res.val()).map(([key, val]) => {
-                    val.user = key
-                    return val
-            }).reduce((finalUsers, current) => {
-                if (!this.state.filteredUsers.includes(current.user)) {
-                    // console.log('keys', this.state.filteredUsers, current)
-                    finalUsers.push(current)
-                }
-                return finalUsers
-            }, [])
-          this.setState({users})
         })
     }
 
@@ -92,116 +94,14 @@ export default class Inbox extends React.Component {
         )
     }
 
-        submitMessage = (userId) => {
-            let date = Date.now()
-        if (this.state.message.length) {
-            let metadata = {
-                metadata: {
-                    initiator: this.userInfo.uid,
-                    receiver: userId,
-                    date: date
-                }
-            }
-            let message = {
-                msg: this.state.message,
-                sender: this.userInfo.uid,
-            }
-            this.setState({message: ''})
-            firebase.database().ref('conversations').push(metadata)
-            .then((res) => {
-                return res.key
-            })
-            .then((key) => {
-                firebase.database().ref('conversations').child(key).child('messages').push(message)
-                return key
-            })
-            .then((key) => {
-                firebase.database().ref('userConversations').child(this.userInfo.uid).child(key).set(true)
-                return key
-            })
-            .then((key) => {
-                firebase.database().ref('userConversations').child(userId).child(key).set(true)
-            })
-        }
-    }
-
-        startChat = (userId) => {
-            if (userId == this.state.sendingTo) {
-            return (
-                <View style={styles.messageRow}>
-                    <TextInput
-                        value={this.state.message}
-                        onChangeText={text => this.setState({message: text})}
-                        style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholderTextColor="lightgrey"
-                        placeholder="Message..."
-                    />
-                    <TouchableOpacity style={styles.submit} onPress={() => this.submitMessage(userId)}>
-                        <Text style={styles.submitText}>Submit</Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        }
-        return
-    }
-
-    renderItem = ({item}) => {
-        // console.log(item)
-        if (item.user == undefined) {
-            return
-        } else {
-            return (
-                <View>
-                    <TouchableOpacity onPress={() => this.setState({sendingTo: item.user})}>
-                        <View style={styles.row}>
-                            <Image style={styles.avatar} source={{uri: item.profImage}} />
-                            <Text style={styles.usernameText}>{item.username}</Text>
-                        </View>
-                    </TouchableOpacity>
-                    {
-                    <View>
-                        {this.startChat(item.user)}
-                    </View>
-                    }  
-                </View>
-            );
-        }
-    }
-
-    userModal = () => {
-        return (
-            <Modal
-             animationType="slide"
-             transparent={false}
-             visible={this.state.modalVisible}
-            >
-                <View style={styles.modalContainer}>
-                    <Text style={styles.title}>Start a Conversation</Text>
-                    <TouchableOpacity style={styles.hideModalBtn}
-                     onPress={() => {this.setState({modalVisible: false})}}>
-                        <Text style={styles.hideModalText}>Close</Text>
-                    </TouchableOpacity>
-                    <FlatList 
-                     data={this.state.users} 
-                     extraData={this.state}
-                     renderItem={this.renderItem}
-                     keyExtractor={(item) => item.username} 
-                    />
-                </View>
-            </Modal>
-        )
-    }
-
     render(){
         return (
             <View style = {styles.container}>
-                <TouchableOpacity style={styles.addUserBtn} onPress={() => this.setState({modalVisible: true})}>
+                <TouchableOpacity ref={"modal"} style={styles.addUserBtn} onPress={() => this.refs.modal.show()}>
                     <Text style={styles.addUserText}>Add a User</Text>
                 </TouchableOpacity>
                 {this.displayConversations(this.userInfo)}
-                {this.userModal()}  
-                {/* <AddUserModal /> */}
+                <AddUserModal ref={"modal"} thisUser={this.userInfo} unmessagedUsers={this.state.users} />
             </View>
         )
     }

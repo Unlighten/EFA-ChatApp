@@ -10,7 +10,7 @@ export default class Channel extends React.Component {
         super(props)
         this.state = {
             message: '',
-            messages: []
+            messages: [],
         }
 
         this.userInfo = this.props.navigation.state.params.userInfo
@@ -50,7 +50,7 @@ export default class Channel extends React.Component {
     renderItem({item}) {
         if (item.username && item.profImage !== undefined) {
             return (
-            <View key={item.key} style={styles.row}>
+            <View style={styles.row}>
                 <Image style={styles.avatar} source={{uri: item.profImage}} />
                 <View style={styles.rowText}>
                     <Text style={styles.sender}>{item.username}</Text>
@@ -72,7 +72,10 @@ export default class Channel extends React.Component {
                  data={this.state.messages} 
                  extraData={this.state}
                  renderItem={this.renderItem}
-                 keyExtractor={(item) => item.key} 
+                 keyExtractor={(item, index) => index}
+                 ref={ref => this.flatList = ref}
+                 onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                 onLayout={() => this.flatList.scrollToEnd({animated: true})}
                 />
                 <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
                 <View style={styles.footer}>
