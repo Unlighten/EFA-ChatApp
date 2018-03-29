@@ -15,7 +15,7 @@ export default class Chat extends React.Component {
 
         this.otherUser = this.props.navigation.state.params.otherUser
         this.userInfo = this.props.navigation.state.params.userInfo
-    };
+    }
 
     componentDidMount = () => {
         firebase.database().ref('conversations').child(this.otherUser.conversationKey).child('messages').on('child_added', 
@@ -24,13 +24,15 @@ export default class Chat extends React.Component {
             firebase.database().ref('userInformation').child(data.sender).once('value')
             .then((res) => {
                 let profData = res.val()
+                let messages = this.state.messages
+
                 data.profImage = profData.profImage
                 data.username = profData.username
                 data.key = child.key
+
+                messages.push(data)
+                this.setState({messages})
             })
-            let messages = this.state.messages
-            messages.push(data)
-            this.setState({messages})
         })
     }
 
@@ -42,7 +44,7 @@ export default class Chat extends React.Component {
                 sender: this.userInfo.uid,
                 date: date
             }
-            this.setState({message: ''})
+            this.setState({message: ''})                        
             firebase.database().ref('conversations').child(this.otherUser.conversationKey).child('messages').push(message)
         }
     }
@@ -57,7 +59,7 @@ export default class Chat extends React.Component {
                     <Text style={styles.message}>{item.msg}</Text>
                 </View>
             </View>
-            );
+            )
         }
         return
     }

@@ -11,11 +11,9 @@ export default class Inbox extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            modalVisible: false,
             inbox: [],
             users: [],
             filteredUsers: [],
-            message: '',
     }
 
         this.userInfo = this.props.navigation.state.params.userInfo

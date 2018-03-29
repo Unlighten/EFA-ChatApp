@@ -24,13 +24,6 @@ export default {
         fontSize: 18,
         fontWeight: '600',
     },
-    messageRow: {
-        flexDirection: 'row',
-        borderColor: commonColor.brandColor,
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        borderRightWidth: 1
-    },
     avatar: {
         borderRadius: 20,
         width: 40,

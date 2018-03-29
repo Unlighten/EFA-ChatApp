@@ -13,7 +13,7 @@ export default class AddUserModal extends React.Component {
             unmessagedUsers: []
         }
         thisUser = this.props.userInfo
-    };
+    }
 
 
     componentWillReceiveProps = () => {
@@ -22,19 +22,20 @@ export default class AddUserModal extends React.Component {
     }
     
 
-    show = () => {
+    show = () => {        
+        console.log(this.props.thisUser.username)
         this.setState({
           modalVisible: true,
         })
       }
 
-      hide = () => {
+    hide = () => {
         this.setState({
           modalVisible: false,
         })
-      }
+    }
 
-      startChat = (userId) => {
+    startChat = (userId) => {
         if (userId == this.state.sendingTo) {
         return (
             <View style={styles.messageRow}>
